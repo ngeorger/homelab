@@ -9,11 +9,11 @@ vault:
       ingressClassName: nginx
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
+        hajimari.io/appName: Vault
+        hajimari.io/icon: database-lock
       hosts:
         - host: &host vault.172-28-0-3.nip.io
       tls:
         - secretName: vault-tls-certificate
           hosts:
             - *host
-    dev:
-      enabled: true  # TODO disable vault dev mode

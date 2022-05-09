@@ -6,6 +6,8 @@ kube-prometheus-stack:
       ingressClassName: nginx
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
+        hajimari.io/appName: Grafana
+        hajimari.io/icon: chart-bar
       hosts:
         - &host grafana.172-28-0-3.nip.io
       tls:
@@ -16,6 +18,22 @@ kube-prometheus-stack:
       - name: Loki
         type: loki
         url: http://loki.loki:3100
+    grafana.ini:
+      server:
+        root_url: https://grafana.khuedoan.com
+      # TODO disable basic auth
+      # auth.basic:
+      #   disable_login_form: true
+      auth.generic_oauth:
+        enabled: true
+        allow_sign_up: true
+        name: Dex
+        client_id: grafana-sso
+        client_secret: klZ0sU1EXA5il68lwCOW9kAjCoFFMVINdSuvG951B3Pr
+        scopes: openid profile email groups
+        auth_url: https://dex.khuedoan.com/auth
+        token_url: https://dex.khuedoan.com/token
+        api_url: https://dex.khuedoan.com/userinfo
 
   prometheus:
     prometheusSpec:
