@@ -43,7 +43,7 @@ Terraform API token summary:
 This API token will affect the below accounts and zones, along with their respective permissions
 
 └── Khue Doan - Argo Tunnel:Edit, Account Settings:Read
-    └── khuedoan.com - Zone:Read, DNS:Edit
+    └── 172-28-0-3.nip.io - Zone:Read, DNS:Edit
 
 Client IP Address Filtering
 
