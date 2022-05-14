@@ -12,6 +12,7 @@ spec:
       backoffLimit: 3
       template:
         spec:
+          serviceAccountName: gitea-admin
           restartPolicy: Never
           containers:
             - name: apply
@@ -29,6 +30,8 @@ spec:
                     secretKeyRef:
                       name: gitea-admin-secret
                       key: password
+                - name: VAULT_ADDR
+                  value: http://vault.vault:8200
               workingDir: /go/src/gitea-config
               command:
                 - sh

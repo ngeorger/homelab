@@ -1,9 +1,12 @@
-# TODO create user and access token
-# users:
-#   - name: renovate
-#     fullName: Renovate
-#     email: bot@renovateapp.com
-#     tokenSecretRef: renovate-secret # ???
+users:
+  - name: gitea_admin
+    fullName: Admin
+    email: admin@khuedoan.com
+    accessTokens:
+      - renovate
+    oauthApplications:
+      - name: dex
+        redirectUrl: https://dex.khuedoan.com/callback
 organizations:
   - name: ops
     description: Operations

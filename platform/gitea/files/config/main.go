@@ -3,10 +3,13 @@ package main
 // TODO WIP clean this up
 
 import (
+	"fmt"
 	"log"
 	"os"
 
 	"code.gitea.io/sdk/gitea"
+	vault "github.com/hashicorp/vault/api"
+	auth "github.com/hashicorp/vault/api/auth/kubernetes"
 	"gopkg.in/yaml.v2"
 )
 
@@ -55,6 +58,42 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// USER VAULT
+
+	vault_config := vault.DefaultConfig()
+	vault_client, err := vault.NewClient(vault_config)
+
+	if err != nil {
+		log.Fatalf("unable to initialize Vault client: %w", err)
+	}
+
+	_, err = auth.NewKubernetesAuth(
+		"gitea-admin",
+	)
+
+	if err != nil {
+		log.Fatalf("unable to initialize Kubernetes auth method: %w", err)
+	} else {
+		log.Print("HERLEERERERE")
+	}
+
+	path := fmt.Sprintf("/secret/data/%s", "gitea/admin-test/oauth-applications/dex")
+	log.Print(path)
+	secretData := map[string]interface{}{
+		"data": map[string]interface{}{},
+	}
+	secretData["data"].(map[string]interface{})["client_id"] = "testid"
+	secretData["data"].(map[string]interface{})["client_secret"] = "testsecret"
+	_, err = vault_client.Logical().Write(path, secretData)
+
+	if err != nil {
+		log.Fatalf("Unable to write secret: %v", err)
+	} else {
+		log.Println("Secret written successfully.")
+	}
+
+	// USER VAULT
 
 	for _, org := range config.Organizations {
 		_, _, err = client.CreateOrg(gitea.CreateOrgOption{
